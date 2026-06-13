@@ -1,0 +1,28 @@
+.lowSection {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 18px; margin-bottom: 20px;
+}
+.sectionTitle { font-size: 1rem; margin-bottom: 12px; }
+.allGood { color: var(--text-secondary); font-size: 0.9375rem; }
+.lowList { list-style: none; display: flex; flex-direction: column; }
+.lowItem {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+}
+.lowItem:last-child { border-bottom: none; }
+.lowName { font-weight: 600; display: block; }
+.lowSerial { font-size: 0.8125rem; color: var(--text-secondary); }
+.lowQty { color: var(--danger); font-weight: 600; }
+
+.quickRow { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.quickCard {
+  display: flex; flex-direction: column; gap: 4px;
+  background: var(--ink); color: var(--text-on-dark);
+  border-radius: var(--radius-lg); padding: 20px;
+}
+.quickCard:hover { background: var(--ink-soft); }
+.quickTitle { font-weight: 600; font-size: 1.0625rem; }
+.quickDesc { font-size: 0.875rem; opacity: 0.75; }
+@media (min-width: 720px) {
+  .quickRow { grid-template-columns: 1fr 1fr; }
+}

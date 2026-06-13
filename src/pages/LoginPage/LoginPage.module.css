@@ -1,0 +1,27 @@
+.screen {
+  min-height: 100%;
+  display: grid; place-items: center;
+  padding: 24px;
+  background: var(--ink);
+}
+.card {
+  width: min(400px, 100%);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--shadow-md);
+}
+.brand { text-align: center; margin-bottom: 24px; }
+.mark {
+  display: inline-block; width: 40px; height: 40px; border-radius: 50%;
+  border: 3px solid var(--brass); position: relative; margin-bottom: 12px;
+}
+.mark::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 3px; height: 13px; background: var(--brass);
+  transform-origin: bottom center; transform: translate(-50%, -100%) rotate(35deg);
+}
+.title { font-size: 1.5rem; }
+.subtitle { color: var(--text-secondary); font-size: 0.9375rem; margin-top: 2px; }
+.form { display: flex; flex-direction: column; gap: 16px; }
+.error { color: var(--danger); font-size: 0.875rem; font-weight: 500; text-align: center; }

@@ -1,0 +1,15 @@
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 0.875rem; font-weight: 600; color: var(--text-secondary); }
+.control {
+  min-height: var(--tap);
+  padding: 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  transition: border-color 0.15s;
+}
+.control:focus { border-color: var(--brass); outline: none; }
+.invalid { border-color: var(--danger); }
+.hint { font-size: 0.8125rem; color: var(--text-tertiary); }
+.error { font-size: 0.8125rem; color: var(--danger); font-weight: 500; }

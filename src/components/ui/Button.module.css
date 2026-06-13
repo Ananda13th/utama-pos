@@ -1,0 +1,39 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--tap);
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.fullWidth { width: 100%; }
+
+.primary { background: var(--brass); color: #fff; }
+.primary:not(:disabled):hover { background: var(--brass-dark); }
+
+.secondary { background: var(--surface); color: var(--text); border-color: var(--border-strong); }
+.secondary:not(:disabled):hover { background: var(--surface-alt); }
+
+.danger { background: var(--danger); color: #fff; }
+.danger:not(:disabled):hover { filter: brightness(0.93); }
+
+.ghost { background: transparent; color: var(--text-secondary); }
+.ghost:not(:disabled):hover { background: var(--surface-alt); }
+
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+.secondary .spinner, .ghost .spinner {
+  border-color: rgba(22,32,46,0.25); border-top-color: var(--text);
+}
+@keyframes spin { to { transform: rotate(360deg); } }

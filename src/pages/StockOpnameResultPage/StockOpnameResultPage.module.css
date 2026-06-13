@@ -1,0 +1,18 @@
+.tabs { display: inline-flex; background: var(--surface-alt); border-radius: var(--radius-md); padding: 4px; margin-bottom: 16px; }
+.tab { background: none; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-weight: 600; color: var(--text-secondary); font-size: 0.875rem; }
+.tabActive { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
+.tableWrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+.table th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); font-weight: 600; background: var(--surface-alt); }
+.table tr:last-child td { border-bottom: none; }
+.num { text-align: right; }
+.tName { font-weight: 600; display: block; }
+.tSerial { font-size: 0.8125rem; color: var(--text-secondary); }
+.selisih { font-weight: 700; }
+.short { background: var(--danger-soft); }
+.short .selisih { color: var(--danger); }
+.missing { background: #fdecea; }
+.missing .selisih { color: var(--danger); }
+.over { background: var(--warning-soft); }
+.over .selisih { color: #8a5c11; }

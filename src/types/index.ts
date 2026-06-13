@@ -1,0 +1,85 @@
+// Definisi tipe global Utama POS
+
+export type RoleName = 'owner' | 'cashier';
+
+export interface AppUser {
+  user_id: string;
+  role_id: string;
+  email: string;
+  role: RoleName; // di-join dari tabel roles saat login
+  created_at: string;
+}
+
+export interface Brand {
+  brand_id: string;
+  brand_name: string;
+  created_at?: string;
+}
+
+export interface Product {
+  product_id: string;
+  brand_id: string;
+  brand_name: string; // di-join dari brands
+  serial_number: string;
+  barcode: string;
+  base_price: number;
+  available_stock: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Payload untuk tambah/edit produk (tanpa field auto-generated)
+export interface ProductInput {
+  brand_id: string;
+  serial_number: string;
+  barcode: string;
+  base_price: number;
+  available_stock: number;
+}
+
+export interface Transaction {
+  transaction_id: string;
+  user_id: string;
+  product_id: string;
+  transaction_time: string;
+  final_price: number;
+  quantity: number;
+  // field hasil join (opsional)
+  serial_number?: string;
+  brand_name?: string;
+  base_price?: number;
+}
+
+export interface StockOpnameSession {
+  session_id: string;
+  user_id: string;
+  session_date: string;
+  status: 'ongoing' | 'completed';
+  notes?: string | null;
+  created_at: string;
+}
+
+export interface ScannedItem {
+  item_id: string;
+  session_id: string;
+  product_id: string;
+  scanned_quantity: number;
+}
+
+// Satu baris pada laporan rekonsiliasi stok
+export interface ReconciliationRow {
+  product_id: string;
+  brand_name: string;
+  serial_number: string;
+  expected_qty: number;
+  scanned_qty: number;
+  selisih: number; // scanned - expected; negatif = barang hilang/kurang
+}
+
+// Ringkasan laporan pendapatan
+export interface RevenueSummary {
+  total_omzet: number;
+  total_hpp: number;
+  total_profit: number;
+  jumlah_transaksi: number;
+}

@@ -1,0 +1,8 @@
+.list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; }
+.head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.name { font-weight: 600; }
+.price { font-weight: 600; }
+.meta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; font-size: 0.8125rem; color: var(--text-secondary); }
+.pos { color: var(--success); font-weight: 600; }
+.neg { color: var(--danger); font-weight: 600; }

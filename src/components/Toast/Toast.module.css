@@ -1,0 +1,30 @@
+.host {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+  width: min(420px, calc(100vw - 32px));
+}
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  animation: slideUp 0.2s ease;
+}
+.success { background: var(--success-soft); color: #1c5a3f; border: 1px solid #bfe0d0; }
+.error { background: var(--danger-soft); color: #8f261c; border: 1px solid #f1c4be; }
+.warning { background: var(--warning-soft); color: #8a5c11; border: 1px solid #ecd2a0; }
+.info { background: var(--info-soft); color: #235581; border: 1px solid #c2dbf0; }
+.close { background: none; border: none; font-size: 1.25rem; line-height: 1; color: inherit; opacity: 0.6; }
+.close:hover { opacity: 1; }
+@keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }

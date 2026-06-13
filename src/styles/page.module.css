@@ -1,0 +1,13 @@
+.pageHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+.pageTitle { font-size: 1.375rem; }
+.section { margin-bottom: 20px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.formStack { display: flex; flex-direction: column; gap: 16px; max-width: 480px; }
+.formRow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.actions { display: flex; gap: 12px; margin-top: 8px; }
+.empty { text-align: center; padding: 48px 20px; color: var(--text-secondary); }
+.emptyTitle { font-weight: 600; margin-bottom: 6px; color: var(--text); }
+@media (min-width: 720px) {
+  .grid4 { grid-template-columns: repeat(4, 1fr); }
+}
