@@ -31,7 +31,11 @@ export function LoginPage() {
 		<div className={styles.screen}>
 			<div className={styles.card}>
 				<div className={styles.brand}>
-					<span className={styles.mark} aria-hidden='true' />
+					<img
+						src='/apple-touch-icon.png'
+						alt='Logo Utama Arloji'
+						className={styles.logo}
+					/>
 					<h1 className={styles.title}>Utama POS</h1>
 					<p className={styles.subtitle}>Toko Jam Utama Arloji</p>
 				</div>

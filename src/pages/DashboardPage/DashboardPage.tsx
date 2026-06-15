@@ -15,8 +15,6 @@ export function DashboardPage() {
 	const { data: products = [] } = useGetProductsQuery();
 	const { data: todayTx = [] } = useGetTransactionsQuery({ from, to });
 
-	// Produk dengan stok menipis (<= 1 sebagai ambang sederhana)
-	const lowStock = products.filter((product) => product.available_stock <= 1);
 	const omzetHariIni = todayTx.reduce(
 		(sum, transaction) => sum + transaction.final_price * transaction.quantity,
 		0,
@@ -41,35 +39,7 @@ export function DashboardPage() {
 					/>
 				)}
 				<StatCard label='Total produk' value={formatNumber(products.length)} />
-				<StatCard
-					label='Stok menipis'
-					value={formatNumber(lowStock.length)}
-					tone={lowStock.length > 0 ? 'danger' : 'default'}
-				/>
 			</div>
-
-			<section className={styles.lowSection}>
-				<h2 className={styles.sectionTitle}>Perlu perhatian</h2>
-				{lowStock.length === 0 ? (
-					<p className={styles.allGood}>Semua stok dalam kondisi aman.</p>
-				) : (
-					<ul className={styles.lowList}>
-						{lowStock.map((product) => (
-							<li key={product.product_id} className={styles.lowItem}>
-								<div>
-									<span className={styles.lowName}>{product.brand_name}</span>
-									<span className={styles.lowSerial}>
-										{product.serial_number}
-									</span>
-								</div>
-								<span className={`${styles.lowQty} mono`}>
-									{product.available_stock} unit
-								</span>
-							</li>
-						))}
-					</ul>
-				)}
-			</section>
 
 			<div className={styles.quickRow}>
 				<Link to='/transactions/new' className={styles.quickCard}>
