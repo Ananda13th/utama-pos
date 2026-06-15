@@ -5,16 +5,16 @@
    ============================================================ */
 :root {
   /* Warna dasar */
-  --ink: #16202E;           /* navy gelap (dial) */
+  --ink: #1E2B8C;           /* navy gelap (dial) */
   --ink-soft: #25344a;
   --paper: #F5F6F8;         /* latar aplikasi */
   --surface: #FFFFFF;       /* kartu, panel */
   --surface-alt: #EFF1F4;   /* baris bergaris, hover */
 
   /* Aksen kuningan (movement jam) — dipakai hemat untuk aksi utama */
-  --brass: #B08A3E;
-  --brass-dark: #8C6D2E;
-  --brass-soft: #F3ECDC;
+  --brass: #E8231A;
+  --brass-dark: #B51C15;
+  --brass-soft: #FDECEA;
 
   /* Semantik */
   --success: #2E7D5B;
