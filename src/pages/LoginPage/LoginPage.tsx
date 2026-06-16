@@ -46,7 +46,7 @@ export function LoginPage() {
 						name='email'
 						type='email'
 						value={email}
-						onChange={(e) => setEmail(e.target.value)}
+						onChange={(event) => setEmail(event.target.value)}
 						placeholder='nama@utamaarloji.com'
 						autoComplete='email'
 						required
@@ -56,7 +56,7 @@ export function LoginPage() {
 						name='password'
 						type='password'
 						value={password}
-						onChange={(e) => setPassword(e.target.value)}
+						onChange={(event) => setPassword(event.target.value)}
 						placeholder='Masukkan password'
 						autoComplete='current-password'
 						required

@@ -15,17 +15,19 @@ import styles from './ProductsPage.module.css';
 export function ProductsPage() {
 	const { data: products = [], isLoading } = useGetProductsQuery();
 	const [deleteProduct] = useDeleteProductMutation();
-	const isOwner = useAppSelector((s) => s.auth.user?.role === 'owner');
+	const isOwner = useAppSelector(
+		(stateSelector) => stateSelector.auth.user?.role === 'owner',
+	);
 	const toast = useToast();
 	const navigate = useNavigate();
 	const [search, setSearch] = useState('');
 
-	const filtered = products.filter((product) => {
-		const q = search.toLowerCase();
+	const filteredProducts = products.filter((product) => {
+		const query = search.toLowerCase();
 		return (
-			product.brand_name.toLowerCase().includes(q) ||
-			product.serial_number.toLowerCase().includes(q) ||
-			product.barcode.includes(q)
+			product.brand_name.toLowerCase().includes(query) ||
+			product.serial_number.toLowerCase().includes(query) ||
+			product.barcode.includes(query)
 		);
 	});
 
@@ -57,17 +59,17 @@ export function ProductsPage() {
 					name='search'
 					placeholder='Cari merk, serial, atau barcode'
 					value={search}
-					onChange={(e) => setSearch(e.target.value)}
+					onChange={(event) => setSearch(event.target.value)}
 				/>
 			</div>
 
 			{isLoading ? (
 				<div className={styles.skeleton}>
-					{Array.from({ length: 4 }).map((_, i) => (
-						<div key={i} className={styles.skelRow} />
+					{Array.from({ length: 4 }).map((_, index) => (
+						<div key={index} className={styles.skelRow} />
 					))}
 				</div>
-			) : filtered.length === 0 ? (
+			) : filteredProducts.length === 0 ? (
 				<div className={page.empty}>
 					<p className={page.emptyTitle}>
 						{products.length === 0 ? 'Belum ada produk' : 'Tidak ada hasil'}
@@ -80,31 +82,37 @@ export function ProductsPage() {
 				</div>
 			) : (
 				<ul className={styles.list}>
-					{filtered.map((p) => (
-						<li key={p.product_id} className={styles.item}>
+					{filteredProducts.map((filteredProduct) => (
+						<li key={filteredProduct.product_id} className={styles.item}>
 							<div className={styles.itemMain}>
-								<span className={styles.brand}>{p.brand_name}</span>
-								<span className={styles.serial}>{p.serial_number}</span>
-								<span className={styles.barcode}>{p.barcode}</span>
+								<span className={styles.brand}>
+									{filteredProduct.brand_name}
+								</span>
+								<span className={styles.serial}>
+									{filteredProduct.serial_number}
+								</span>
+								<span className={styles.barcode}>
+									{filteredProduct.barcode}
+								</span>
 							</div>
 							<div className={styles.itemMeta}>
 								<span className={`${styles.price} mono`}>
-									{formatRupiah(p.base_price)}
+									{formatRupiah(filteredProduct.base_price)}
 								</span>
 								<span
 									className={[
 										styles.stock,
 										'mono',
-										p.available_stock <= 1 ? styles.stockLow : '',
+										filteredProduct.available_stock <= 1 ? styles.stockLow : '',
 									].join(' ')}
 								>
-									{p.available_stock} unit
+									{filteredProduct.available_stock} unit
 								</span>
 							</div>
 							{isOwner && (
 								<div className={styles.itemActions}>
 									<Link
-										to={`/products/${p.product_id}/edit`}
+										to={`/products/${filteredProduct.product_id}/edit`}
 										className={styles.editLink}
 									>
 										Edit
@@ -113,8 +121,8 @@ export function ProductsPage() {
 										className={styles.deleteBtn}
 										onClick={() =>
 											handleDelete(
-												p.product_id,
-												`${p.brand_name} ${p.serial_number}`,
+												filteredProduct.product_id,
+												`${filteredProduct.brand_name} ${filteredProduct.serial_number}`,
 											)
 										}
 									>

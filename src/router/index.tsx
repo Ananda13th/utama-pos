@@ -13,29 +13,34 @@ import { StockOpnameResultPage } from '../pages/StockOpnameResultPage/StockOpnam
 import { UnauthorizedPage } from '../pages/UnauthorizedPage/UnauthorizedPage';
 
 // Bungkus elemen dengan layout + proteksi role
-const owner = (el: React.ReactNode) => (
-  <ProtectedRoute allow={['owner']}>{el}</ProtectedRoute>
+const owner = (renderedElement: React.ReactNode) => (
+	<ProtectedRoute allow={['owner']}>{renderedElement}</ProtectedRoute>
 );
-const auth = (el: React.ReactNode) => <ProtectedRoute>{el}</ProtectedRoute>;
+const auth = (renderedElement: React.ReactNode) => (
+	<ProtectedRoute>{renderedElement}</ProtectedRoute>
+);
 
 export const router = createBrowserRouter([
-  { path: '/login', element: <LoginPage /> },
-  { path: '/unauthorized', element: <UnauthorizedPage /> },
-  {
-    path: '/',
-    element: auth(<AppLayout />),
-    children: [
-      { index: true, element: <Navigate to="/dashboard" replace /> },
-      { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'products', element: <ProductsPage /> },
-      { path: 'products/new', element: owner(<ProductFormPage />) },
-      { path: 'products/:id/edit', element: owner(<ProductFormPage />) },
-      { path: 'transactions/new', element: <TransactionFormPage /> },
-      { path: 'transactions', element: owner(<TransactionsPage />) },
-      { path: 'reports', element: owner(<ReportsPage />) },
-      { path: 'stock-opname', element: owner(<StockOpnamePage />) },
-      { path: 'stock-opname/:id/result', element: owner(<StockOpnameResultPage />) },
-    ],
-  },
-  { path: '*', element: <Navigate to="/dashboard" replace /> },
+	{ path: '/login', element: <LoginPage /> },
+	{ path: '/unauthorized', element: <UnauthorizedPage /> },
+	{
+		path: '/',
+		element: auth(<AppLayout />),
+		children: [
+			{ index: true, element: <Navigate to='/dashboard' replace /> },
+			{ path: 'dashboard', element: <DashboardPage /> },
+			{ path: 'products', element: <ProductsPage /> },
+			{ path: 'products/new', element: owner(<ProductFormPage />) },
+			{ path: 'products/:id/edit', element: owner(<ProductFormPage />) },
+			{ path: 'transactions/new', element: <TransactionFormPage /> },
+			{ path: 'transactions', element: owner(<TransactionsPage />) },
+			{ path: 'reports', element: owner(<ReportsPage />) },
+			{ path: 'stock-opname', element: owner(<StockOpnamePage />) },
+			{
+				path: 'stock-opname/:id/result',
+				element: owner(<StockOpnameResultPage />),
+			},
+		],
+	},
+	{ path: '*', element: <Navigate to='/dashboard' replace /> },
 ]);

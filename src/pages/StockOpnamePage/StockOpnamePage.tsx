@@ -15,13 +15,13 @@ import page from '../../styles/page.module.css';
 import styles from './StockOpnamePage.module.css';
 
 export function StockOpnamePage() {
-	const user = useAppSelector((s) => s.auth.user);
+	const user = useAppSelector((stateSelector) => stateSelector.auth.user);
 	const toast = useToast();
 	const navigate = useNavigate();
 
 	const { data: session } = useGetOngoingSessionQuery();
 	const { data: products = [] } = useGetProductsQuery();
-	const { data: scanned = [] } = useGetScannedItemsQuery(
+	const { data: scannedProducts = [] } = useGetScannedItemsQuery(
 		session?.session_id ?? '',
 		{
 			skip: !session,
@@ -33,7 +33,10 @@ export function StockOpnamePage() {
 	const [scanItem] = useScanItemMutation();
 
 	const scanMap = new Map(
-		scanned.map((s) => [s.product_id, s.scanned_quantity]),
+		scannedProducts.map((product) => [
+			product.product_id,
+			product.scanned_quantity,
+		]),
 	);
 
 	async function handleStart() {
@@ -56,7 +59,7 @@ export function StockOpnamePage() {
 
 	async function handleComplete() {
 		if (!session) return;
-		if (scanned.length === 0) {
+		if (scannedProducts.length === 0) {
 			toast('Belum ada produk yang dipindai.', 'warning');
 			return;
 		}
@@ -102,22 +105,22 @@ export function StockOpnamePage() {
 
 			<h2 className={styles.countTitle}>Hasil pindai</h2>
 			<ul className={styles.countList}>
-				{products.map((p) => {
-					const sc = scanMap.get(p.product_id) ?? 0;
+				{products.map((product) => {
+					const sc = scanMap.get(product.product_id) ?? 0;
 					let state: 'match' | 'short' | 'none' | 'over' = 'none';
 					if (sc === 0) state = 'none';
-					else if (sc === p.available_stock) state = 'match';
-					else if (sc < p.available_stock) state = 'short';
+					else if (sc === product.available_stock) state = 'match';
+					else if (sc < product.available_stock) state = 'short';
 					else state = 'over';
 					return (
-						<li key={p.product_id} className={styles.countItem}>
+						<li key={product.product_id} className={styles.countItem}>
 							<div>
-								<span className={styles.cName}>{p.brand_name}</span>
-								<span className={styles.cSerial}>{p.serial_number}</span>
+								<span className={styles.cName}>{product.brand_name}</span>
+								<span className={styles.cSerial}>{product.serial_number}</span>
 							</div>
 							<div className={styles.countRight}>
 								<span className='mono'>
-									{sc} / {p.available_stock}
+									{sc} / {product.available_stock}
 								</span>
 								<span className={[styles.badge, styles[state]].join(' ')}>
 									{state === 'match'

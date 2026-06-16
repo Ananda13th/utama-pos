@@ -15,7 +15,7 @@ export function DashboardPage() {
 	const { data: products = [] } = useGetProductsQuery();
 	const { data: todayTx = [] } = useGetTransactionsQuery({ from, to });
 
-	const omzetHariIni = todayTx.reduce(
+	const realizedTransaction = todayTx.reduce(
 		(sum, transaction) => sum + transaction.final_price * transaction.quantity,
 		0,
 	);
@@ -34,7 +34,7 @@ export function DashboardPage() {
 				{user?.role === 'owner' && (
 					<StatCard
 						label='Omzet hari ini'
-						value={formatRupiah(omzetHariIni)}
+						value={formatRupiah(realizedTransaction)}
 						tone='brass'
 					/>
 				)}
