@@ -45,3 +45,9 @@
 .sumRow:first-child { font-weight: 600; font-size: 1.0625rem; }
 .positive { color: var(--success); font-weight: 600; }
 .negative { color: var(--danger); font-weight: 600; }
+.input {
+  width: 50%;
+}
+.cartTitle {
+  margin: 10px 0 10px 0;
+}

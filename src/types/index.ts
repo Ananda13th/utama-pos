@@ -37,6 +37,13 @@ export interface ProductInput {
   available_stock: number;
 }
 
+export interface Order {
+  order_id: string;
+  user_id: string;
+  order_time: string;
+  total_amount: number;
+}
+
 export interface Transaction {
   transaction_id: string;
   user_id: string;
@@ -44,7 +51,6 @@ export interface Transaction {
   transaction_time: string;
   final_price: number;
   quantity: number;
-  // field hasil join (opsional)
   serial_number?: string;
   brand_name?: string;
   base_price?: number;
@@ -66,20 +72,28 @@ export interface ScannedItem {
   scanned_quantity: number;
 }
 
-// Satu baris pada laporan rekonsiliasi stok
 export interface ReconciliationRow {
   product_id: string;
   brand_name: string;
   serial_number: string;
   expected_qty: number;
   scanned_qty: number;
-  selisih: number; // scanned - expected; negatif = barang hilang/kurang
+  selisih: number;
 }
 
-// Ringkasan laporan pendapatan
 export interface RevenueSummary {
   total_omzet: number;
   total_hpp: number;
   total_profit: number;
   jumlah_transaksi: number;
+}
+
+export interface CartItem {
+  cart_item_id: string;
+  product_id: string;
+  brand_name: string;
+  serial_number: string;   // hanya untuk tampilan, tidak dikirim ke RPC
+  base_price: number,
+	final_price: number,
+	quantity: number,
 }

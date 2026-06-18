@@ -2,7 +2,7 @@ import { api } from '../../lib/api';
 import { supabase } from '../../lib/supabaseClient';
 import type { Transaction } from '../../types';
 
-interface RawTransaction {
+export interface RawTransaction {
   transaction_id: string;
   user_id: string;
   product_id: string;
@@ -57,6 +57,20 @@ export const transactionsApi = api.injectEndpoints({
       invalidatesTags: ['Transaction', 'Product'],
     }),
 
+      recordOrder: build.mutation<
+      string,
+      { product_id: string; final_price: number; quantity: number }[]
+    >({
+      async queryFn(items) {
+        const { data, error } = await supabase.rpc('record_order', {
+          p_items: items,
+        });
+        if (error) return { error: { message: error.message } };
+        return { data: data as string };
+      },
+      invalidatesTags: ['Transaction', 'Product'],
+    }),
+
     // Riwayat transaksi dengan filter rentang tanggal (ISO string)
     getTransactions: build.query<
       Transaction[],
@@ -80,5 +94,5 @@ export const transactionsApi = api.injectEndpoints({
   }),
 });
 
-export const { useRecordTransactionMutation, useGetTransactionsQuery } =
+export const { useRecordTransactionMutation, useGetTransactionsQuery, useRecordOrderMutation } =
   transactionsApi;

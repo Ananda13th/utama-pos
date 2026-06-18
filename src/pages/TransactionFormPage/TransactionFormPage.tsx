@@ -4,7 +4,13 @@ import {
 	useGetProductsQuery,
 	useLazyGetProductByBarcodeQuery,
 } from '../../features/products/productsApi';
-import { useRecordTransactionMutation } from '../../features/transactions/transactionsApi';
+import { useRecordOrderMutation } from '../../features/transactions/transactionsApi';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
+import {
+	addTransaction,
+	removeTransaction,
+	clearTransaction,
+} from '../../features/transactions/transactionsSlice';
 import { useToast } from '../../hooks/useToast';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -13,36 +19,49 @@ import { formatRupiah, calculateProfit } from '../../utils/format';
 import type { Product } from '../../types';
 import page from '../../styles/page.module.css';
 import styles from './TransactionFormPage.module.css';
+import { CartItemCard } from '../../components/ui/CartItemCard';
 
 export function TransactionFormPage() {
 	const navigate = useNavigate();
 	const toast = useToast();
+	const dispatch = useAppDispatch();
+	const cart = useAppSelector((s) => s.transactions.items);
+
 	const { data: products = [] } = useGetProductsQuery();
 	const [lookupBarcode] = useLazyGetProductByBarcodeQuery();
-	const [recordTransaction, { isLoading }] = useRecordTransactionMutation();
+	const [recordOrder] = useRecordOrderMutation();
 
 	const [selected, setSelected] = useState<Product | null>(null);
 	const [search, setSearch] = useState('');
 	const [showScanner, setShowScanner] = useState(false);
 	const [finalPrice, setFinalPrice] = useState<number>(0);
 	const [quantity, setQuantity] = useState<number>(1);
+	const [checkingOut, setCheckingOut] = useState(false);
 
 	const searchResults =
 		search.length >= 2 && !selected
 			? products
-					.filter((product) => {
+					.filter((p) => {
 						const q = search.toLowerCase();
 						return (
-							product.brand_name.toLowerCase().includes(q) ||
-							product.serial_number.toLowerCase().includes(q)
+							p.brand_name.toLowerCase().includes(q) ||
+							p.serial_number.toLowerCase().includes(q)
 						);
 					})
 					.slice(0, 6)
 			: [];
 
-	function selectProduct(product: Product) {
-		setSelected(product);
-		setFinalPrice(product.base_price);
+	function resetForm() {
+		setSelected(null);
+		setFinalPrice(0);
+		setQuantity(1);
+		setSearch('');
+		setShowScanner(false);
+	}
+
+	function selectProduct(p: Product) {
+		setSelected(p);
+		setFinalPrice(p.base_price);
 		setQuantity(1);
 		setSearch('');
 		setShowScanner(false);
@@ -58,31 +77,78 @@ export function TransactionFormPage() {
 		}
 	}
 
+	// Stok yang sudah "dipesan" item lain di cart untuk produk yang sama —
+	// perlu dikurangi dari stok tampilan agar tidak overselling sebelum checkout
+	const reservedInCart = selected
+		? cart
+				.filter((i) => i.product_id === selected.product_id)
+				.reduce((sum, i) => sum + i.quantity, 0)
+		: 0;
+	const availableForForm = selected
+		? selected.available_stock - reservedInCart
+		: 0;
+
 	const belowCost = selected ? finalPrice < selected.base_price : false;
-	const stockShort = selected ? quantity > selected.available_stock : false;
+	const stockShort = selected ? quantity > availableForForm : false;
 	const profit = selected
 		? calculateProfit(finalPrice, selected.base_price, quantity)
 		: 0;
 
-	async function handleSubmit(event: FormEvent) {
-		event.preventDefault();
+	function handleTambahBarang(e: FormEvent) {
+		e.preventDefault();
 		if (!selected) return;
 		if (stockShort) {
 			toast('Stok tidak mencukupi.', 'error');
 			return;
 		}
-		const result = await recordTransaction({
-			product_id: selected.product_id,
-			final_price: finalPrice,
-			quantity,
-		});
-		if ('error' in result) {
-			toast((result.error as { message: string }).message, 'error');
+		dispatch(
+			addTransaction({
+				product_id: selected.product_id,
+				brand_name: selected.brand_name,
+				serial_number: selected.serial_number,
+				base_price: selected.base_price,
+				final_price: finalPrice,
+				quantity,
+			}),
+		);
+		toast('Barang ditambahkan ke keranjang.', 'success');
+		resetForm();
+	}
+
+	async function handleSelesaikanPesanan() {
+		if (cart.length === 0) {
+			toast('Keranjang masih kosong.', 'warning');
 			return;
 		}
-		toast('Transaksi berhasil disimpan.', 'success');
+
+		setCheckingOut(true);
+		const result = await recordOrder(
+			cart.map((item) => ({
+				product_id: item.product_id,
+				final_price: item.final_price,
+				quantity: item.quantity,
+			})),
+		);
+		setCheckingOut(false);
+
+		if ('error' in result) {
+			// All-or-nothing: order gagal total, cart tetap utuh agar kasir bisa retry
+			toast(
+				`Pesanan gagal disimpan: ${(result.error as { message: string }).message}`,
+				'error',
+			);
+			return;
+		}
+
+		dispatch(clearTransaction());
+		toast('Pesanan berhasil disimpan.', 'success');
 		navigate('/dashboard');
 	}
+
+	const cartTotal = cart.reduce(
+		(sum, i) => sum + i.final_price * i.quantity,
+		0,
+	);
 
 	return (
 		<div>
@@ -110,26 +176,26 @@ export function TransactionFormPage() {
 						name='search'
 						placeholder='Ketik merk atau serial number'
 						value={search}
-						onChange={(event) => setSearch(event.target.value)}
+						onChange={(e) => setSearch(e.target.value)}
 					/>
 					{searchResults.length > 0 && (
 						<ul className={styles.results}>
-							{searchResults.map((product) => (
-								<li key={product.product_id}>
+							{searchResults.map((p) => (
+								<li key={p.product_id}>
 									<button
 										className={styles.resultItem}
-										onClick={() => selectProduct(product)}
+										onClick={() => selectProduct(p)}
 									>
 										<div>
 											<span className={styles.resName}>
-												{product.brand_name} · {product.serial_number}
+												{p.brand_name} · {p.serial_number}
 											</span>
 											<span className={styles.resStock}>
-												Stok: {product.available_stock}
+												Stok: {p.available_stock}
 											</span>
 										</div>
 										<span className={`${styles.resPrice} mono`}>
-											{formatRupiah(product.base_price)}
+											{formatRupiah(p.base_price)}
 										</span>
 									</button>
 								</li>
@@ -138,7 +204,11 @@ export function TransactionFormPage() {
 					)}
 				</div>
 			) : (
-				<form className={page.formStack} onSubmit={handleSubmit} noValidate>
+				<form
+					className={page.formStack}
+					onSubmit={handleTambahBarang}
+					noValidate
+				>
 					<div className={styles.selectedCard}>
 						<div>
 							<span className={styles.selName}>{selected.brand_name}</span>
@@ -147,7 +217,7 @@ export function TransactionFormPage() {
 						<button
 							type='button'
 							className={styles.changeBtn}
-							onClick={() => setSelected(null)}
+							onClick={resetForm}
 						>
 							Ganti
 						</button>
@@ -158,8 +228,11 @@ export function TransactionFormPage() {
 						<span className='mono'>{formatRupiah(selected.base_price)}</span>
 					</div>
 					<div className={styles.infoRow}>
-						<span>Stok tersedia</span>
-						<span className='mono'>{selected.available_stock} unit</span>
+						<span>
+							Stok tersedia
+							{reservedInCart > 0 ? ' (sudah dikurangi keranjang)' : ''}
+						</span>
+						<span className='mono'>{availableForForm} unit</span>
 					</div>
 
 					<Input
@@ -189,7 +262,7 @@ export function TransactionFormPage() {
 
 					<div className={styles.summary}>
 						<div className={styles.sumRow}>
-							<span>Total</span>
+							<span>Subtotal</span>
 							<span className='mono'>
 								{formatRupiah(finalPrice * quantity)}
 							</span>
@@ -204,10 +277,50 @@ export function TransactionFormPage() {
 						</div>
 					</div>
 
-					<Button type='submit' loading={isLoading} disabled={stockShort}>
-						Simpan Transaksi
+					<Button type='submit' disabled={stockShort}>
+						Tambah Barang
 					</Button>
 				</form>
+			)}
+
+			{cart.length > 0 && (
+				<div className={styles.cartBox}>
+					<h2 className={styles.cartTitle}>Keranjang ({cart.length} item)</h2>
+					<ul className={styles.cartList}>
+						{cart.map((item) => (
+							<CartItemCard
+								key={item.cart_item_id}
+								cartItem={item}
+								onRemove={() => dispatch(removeTransaction(item.cart_item_id))}
+							/>
+						))}
+					</ul>
+
+					<div className={styles.cartTotalRow}>
+						<span className='mono'>Total Pesanan : </span>
+						<span className='mono'>{formatRupiah(cartTotal)}</span>
+					</div>
+
+					<div className={page.actions}>
+						<Button
+							variant='ghost'
+							type='button'
+							onClick={() => {
+								if (confirm('Kosongkan keranjang?'))
+									dispatch(clearTransaction());
+							}}
+						>
+							Kosongkan
+						</Button>
+						<Button
+							type='button'
+							loading={checkingOut}
+							onClick={handleSelesaikanPesanan}
+						>
+							Selesaikan Pesanan
+						</Button>
+					</div>
+				</div>
 			)}
 		</div>
 	);
