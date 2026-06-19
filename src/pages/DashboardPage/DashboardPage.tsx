@@ -3,7 +3,7 @@ import { useGetProductsQuery } from '../../features/products/productsApi';
 import { useGetTransactionsQuery } from '../../features/transactions/transactionsApi';
 import { useAppSelector } from '../../lib/hooks';
 import { StatCard } from '../../components/ui/Card';
-import { formatRupiah, formatNumber, dayRange } from '../../utils/format';
+import { formatCurrency, formatNumber, dayRange } from '../../utils/format';
 import page from '../../styles/page.module.css';
 import styles from './DashboardPage.module.css';
 
@@ -34,7 +34,7 @@ export function DashboardPage() {
 				{user?.role === 'owner' && (
 					<StatCard
 						label='Omzet hari ini'
-						value={formatRupiah(realizedTransaction)}
+						value={formatCurrency(realizedTransaction)}
 						tone='brass'
 					/>
 				)}

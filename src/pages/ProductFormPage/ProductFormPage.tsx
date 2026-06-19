@@ -49,7 +49,6 @@ export function ProductFormPage() {
 	const [errors, setErrors] = useState<Errors>({});
 	const [showScanner, setShowScanner] = useState(false);
 
-	// Isi form saat data edit tersedia
 	useEffect(() => {
 		if (existing) {
 			setForm({

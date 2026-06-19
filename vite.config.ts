@@ -3,7 +3,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
-// Konfigurasi Vite + PWA untuk Utama POS
 export default defineConfig({
   plugins: [
     react(),
@@ -26,7 +25,6 @@ export default defineConfig({
         ],
       },
       workbox: {
-        // Asset statis: CacheFirst. Panggilan API Supabase: NetworkFirst.
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/rest/') || url.host.includes('supabase'),

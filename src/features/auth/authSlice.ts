@@ -3,7 +3,6 @@ import type { AppUser } from '../../types';
 
 interface AuthState {
   user: AppUser | null;
-  // status inisialisasi: true selama cek session pertama kali
   initializing: boolean;
 }
 

@@ -1,22 +1,15 @@
-/* ============================================================
-   Design tokens Utama POS
-   Identitas: presisi instrumen jam — ink navy + aksen kuningan,
-   angka uang & stok pakai tabular monospace.
-   ============================================================ */
-:root {
-  /* Warna dasar */
-  --ink: #1E2B8C;           /* navy gelap (dial) */
-  --ink-soft: #25344a;
-  --paper: #F5F6F8;         /* latar aplikasi */
-  --surface: #FFFFFF;       /* kartu, panel */
-  --surface-alt: #EFF1F4;   /* baris bergaris, hover */
 
-  /* Aksen kuningan (movement jam) — dipakai hemat untuk aksi utama */
+:root {
+  --ink: #1E2B8C;
+  --ink-soft: #25344a;
+  --paper: #F5F6F8;
+  --surface: #FFFFFF;
+  --surface-alt: #EFF1F4;
+
   --brass: #E8231A;
   --brass-dark: #B51C15;
   --brass-soft: #FDECEA;
 
-  /* Semantik */
   --success: #2E7D5B;
   --success-soft: #E3F1EA;
   --danger: #C0392B;
@@ -26,27 +19,22 @@
   --info: #2F6FB0;
   --info-soft: #E7F0F9;
 
-  /* Teks */
   --text: #16202E;
   --text-secondary: #5C6672;
   --text-tertiary: #8B939E;
   --text-on-dark: #EEF1F5;
 
-  /* Garis */
   --border: #DDE1E7;
   --border-strong: #C3C9D2;
 
-  /* Radius & shadow */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
   --shadow-sm: 0 1px 2px rgba(22, 32, 46, 0.06);
   --shadow-md: 0 4px 16px rgba(22, 32, 46, 0.10);
 
-  /* Tipografi */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Roboto Mono', 'SF Mono', 'Menlo', monospace;
 
-  /* Spasi */
-  --tap: 48px; /* tinggi minimum tap target untuk kasir */
+  --tap: 48px;
 }

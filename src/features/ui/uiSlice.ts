@@ -20,7 +20,6 @@ const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    // prepare callback agar bisa dispatch tanpa menyiapkan id manual
     addToast: {
       reducer: (state, action: PayloadAction<Toast>) => {
         state.toasts.push(action.payload);

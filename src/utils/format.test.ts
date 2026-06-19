@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { formatRupiah, calculateProfit, monthRange } from './format';
+import { formatCurrency, calculateProfit, monthRange } from './format';
 
 describe('formatRupiah', () => {
   it('memformat angka ke Rupiah dengan pemisah ribuan', () => {
-    expect(formatRupiah(1500000)).toBe('Rp 1.500.000');
+    expect(formatCurrency(1500000)).toBe('Rp 1.500.000');
   });
   it('membulatkan desimal', () => {
-    expect(formatRupiah(1000.6)).toBe('Rp 1.001');
+    expect(formatCurrency(1000.6)).toBe('Rp 1.001');
   });
 });
 

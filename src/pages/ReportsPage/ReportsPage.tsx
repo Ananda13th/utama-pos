@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useGetRevenueReportQuery } from '../../features/reports/reportsApi';
 import { StatCard } from '../../components/ui/Card';
 import {
-	formatRupiah,
+	formatCurrency,
 	formatNumber,
 	formatDateTime,
 	calculateProfit,
@@ -73,23 +73,23 @@ export function ReportsPage() {
 					<div className={page.grid4} style={{ marginBottom: 20 }}>
 						<StatCard
 							label='Total Omzet'
-							value={formatRupiah(data?.summary.total_omzet ?? 0)}
+							value={formatCurrency(data?.summary.total_omzet ?? 0)}
 							tone='brass'
 						/>
 						<StatCard
 							label='Total HPP'
-							value={formatRupiah(data?.summary.total_hpp ?? 0)}
+							value={formatCurrency(data?.summary.total_hpp ?? 0)}
 						/>
 						<StatCard
 							label='Total Profit'
-							value={formatRupiah(data?.summary.total_profit ?? 0)}
+							value={formatCurrency(data?.summary.total_profit ?? 0)}
 							tone={
 								(data?.summary.total_profit ?? 0) < 0 ? 'danger' : 'success'
 							}
 						/>
 						<StatCard
 							label='Jumlah Transaksi'
-							value={formatNumber(data?.summary.jumlah_transaksi ?? 0)}
+							value={formatNumber(data?.summary.transaction_quantity ?? 0)}
 						/>
 					</div>
 
@@ -113,14 +113,14 @@ export function ReportsPage() {
 										</div>
 										<div className={styles.rowFigs}>
 											<span className='mono'>
-												{formatRupiah(
+												{formatCurrency(
 													transaction.final_price * transaction.quantity,
 												)}
 											</span>
 											<span
 												className={`mono ${profit < 0 ? styles.neg : styles.pos}`}
 											>
-												{formatRupiah(profit)}
+												{formatCurrency(profit)}
 											</span>
 										</div>
 									</li>

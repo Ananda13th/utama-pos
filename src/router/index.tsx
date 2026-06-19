@@ -12,7 +12,6 @@ import { StockOpnamePage } from '../pages/StockOpnamePage/StockOpnamePage';
 import { StockOpnameResultPage } from '../pages/StockOpnameResultPage/StockOpnameResultPage';
 import { UnauthorizedPage } from '../pages/UnauthorizedPage/UnauthorizedPage';
 
-// Bungkus elemen dengan layout + proteksi role
 const owner = (renderedElement: React.ReactNode) => (
 	<ProtectedRoute allow={['owner']}>{renderedElement}</ProtectedRoute>
 );

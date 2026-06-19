@@ -8,7 +8,7 @@ import { useAppSelector } from '../../lib/hooks';
 import { useToast } from '../../hooks/useToast';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
-import { formatRupiah } from '../../utils/format';
+import { formatCurrency } from '../../utils/format';
 import page from '../../styles/page.module.css';
 import styles from './ProductsPage.module.css';
 
@@ -97,7 +97,7 @@ export function ProductsPage() {
 							</div>
 							<div className={styles.itemMeta}>
 								<span className={`${styles.price} mono`}>
-									{formatRupiah(filteredProduct.base_price)}
+									{formatCurrency(filteredProduct.base_price)}
 								</span>
 								<span
 									className={[

@@ -7,31 +7,30 @@ import { setUser, setInitializing } from './features/auth/authSlice';
 import { useGetCurrentUserQuery } from './features/auth/authApi';
 
 function AuthBootstrap() {
-  const dispatch = useAppDispatch();
-  // Pulihkan session saat aplikasi pertama dibuka
-  const { data, isLoading, isSuccess, isError } = useGetCurrentUserQuery();
+	const dispatch = useAppDispatch();
+	const { data, isLoading, isSuccess, isError } = useGetCurrentUserQuery();
 
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(setUser(data ?? null));
-      dispatch(setInitializing(false));
-    }
-    if (isError) {
-      dispatch(setUser(null));
-      dispatch(setInitializing(false));
-    }
-  }, [isSuccess, isError, data, dispatch]);
+	useEffect(() => {
+		if (isSuccess) {
+			dispatch(setUser(data ?? null));
+			dispatch(setInitializing(false));
+		}
+		if (isError) {
+			dispatch(setUser(null));
+			dispatch(setInitializing(false));
+		}
+	}, [isSuccess, isError, data, dispatch]);
 
-  if (isLoading) return null;
-  return null;
+	if (isLoading) return null;
+	return null;
 }
 
 export function App() {
-  return (
-    <>
-      <AuthBootstrap />
-      <RouterProvider router={router} />
-      <ToastHost />
-    </>
-  );
+	return (
+		<>
+			<AuthBootstrap />
+			<RouterProvider router={router} />
+			<ToastHost />
+		</>
+	);
 }

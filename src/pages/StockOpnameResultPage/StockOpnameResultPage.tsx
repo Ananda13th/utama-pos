@@ -16,19 +16,19 @@ export function StockOpnameResultPage() {
 	const [filter, setFilter] = useState<Filter>('diff');
 
 	const total = rows.length;
-	const match = rows.filter((recon) => recon.selisih === 0).length;
-	const diff = rows.filter((recon) => recon.selisih !== 0).length;
+	const match = rows.filter((recon) => recon.difference === 0).length;
+	const diff = rows.filter((recon) => recon.difference !== 0).length;
 
 	const shown = rows.filter((recon) => {
-		if (filter === 'diff') return recon.selisih !== 0;
-		if (filter === 'match') return recon.selisih === 0;
+		if (filter === 'diff') return recon.difference !== 0;
+		if (filter === 'match') return recon.difference === 0;
 		return true;
 	});
 
 	function rowClass(recon: ReconciliationRow): string {
-		if (recon.selisih < 0 && recon.scanned_qty === 0) return styles.missing;
-		if (recon.selisih < 0) return styles.short;
-		if (recon.selisih > 0) return styles.over;
+		if (recon.difference < 0 && recon.scanned_qty === 0) return styles.missing;
+		if (recon.difference < 0) return styles.short;
+		if (recon.difference > 0) return styles.over;
 		return '';
 	}
 
@@ -110,10 +110,10 @@ export function StockOpnameResultPage() {
 											<td className={`${styles.num} mono`}>
 												{recon.scanned_qty}
 											</td>
-											<td className={`${styles.num} mono ${styles.selisih}`}>
-												{recon.selisih > 0
-													? `+${recon.selisih}`
-													: recon.selisih}
+											<td className={`${styles.num} mono ${styles.difference}`}>
+												{recon.difference > 0
+													? `+${recon.difference}`
+													: recon.difference}
 											</td>
 										</tr>
 									))}

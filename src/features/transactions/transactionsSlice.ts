@@ -15,7 +15,6 @@ const transactionsSlice = createSlice({
   name: 'transactions',
   initialState,
   reducers: {
-    // prepare callback agar bisa dispatch tanpa menyiapkan id manual
     addTransaction: {
       reducer: (state, action: PayloadAction<CartItem>) => {
         state.items.push(action.payload);

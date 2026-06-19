@@ -1,12 +1,10 @@
-// Definisi tipe global Utama POS
-
 export type RoleName = 'owner' | 'cashier';
 
 export interface AppUser {
   user_id: string;
   role_id: string;
   email: string;
-  role: RoleName; // di-join dari tabel roles saat login
+  role: RoleName;
   created_at: string;
 }
 
@@ -19,7 +17,7 @@ export interface Brand {
 export interface Product {
   product_id: string;
   brand_id: string;
-  brand_name: string; // di-join dari brands
+  brand_name: string;
   serial_number: string;
   barcode: string;
   base_price: number;
@@ -28,7 +26,6 @@ export interface Product {
   updated_at: string;
 }
 
-// Payload untuk tambah/edit produk (tanpa field auto-generated)
 export interface ProductInput {
   brand_id: string;
   serial_number: string;
@@ -78,21 +75,21 @@ export interface ReconciliationRow {
   serial_number: string;
   expected_qty: number;
   scanned_qty: number;
-  selisih: number;
+  difference: number;
 }
 
 export interface RevenueSummary {
   total_omzet: number;
   total_hpp: number;
   total_profit: number;
-  jumlah_transaksi: number;
+  transaction_quantity: number;
 }
 
 export interface CartItem {
   cart_item_id: string;
   product_id: string;
   brand_name: string;
-  serial_number: string;   // hanya untuk tampilan, tidak dikirim ke RPC
+  serial_number: string;
   base_price: number,
 	final_price: number,
 	quantity: number,

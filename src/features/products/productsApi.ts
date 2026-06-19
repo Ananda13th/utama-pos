@@ -2,7 +2,6 @@ import { api } from '../../lib/api';
 import { supabase } from '../../lib/supabaseClient';
 import type { Product, ProductInput } from '../../types';
 
-// Bentuk baris mentah dari Supabase (brands sebagai relasi bersarang)
 interface RawProduct {
   product_id: string;
   brand_id: string;
@@ -62,7 +61,6 @@ export const productsApi = api.injectEndpoints({
       providesTags: (_response, _error, id) => [{ type: 'Product', id }],
     }),
 
-    // Lookup produk via barcode (dipakai saat transaksi)
     getProductByBarcode: build.query<Product | null, string>({
       async queryFn(barcode) {
         const { data, error } = await supabase
@@ -106,7 +104,6 @@ export const productsApi = api.injectEndpoints({
       async queryFn(id) {
         const { error } = await supabase.from('products').delete().eq('product_id', id);
         if (error) {
-          // FK violation = produk masih dipakai transaksi
           const msg = error.message.includes('foreign key')
             ? 'Produk tidak bisa dihapus karena sudah ada transaksi terkait.'
             : error.message;
@@ -119,7 +116,6 @@ export const productsApi = api.injectEndpoints({
   }),
 });
 
-// Ubah pesan error Postgres jadi lebih ramah
 function friendlyError(message: string): string {
   if (message.includes('products_barcode_key')) return 'Barcode sudah terdaftar.';
   if (message.includes('products_serial_number_key')) return 'Serial number sudah terdaftar.';

@@ -59,10 +59,10 @@ export const reportsApi = api.injectEndpoints({
             acc.total_omzet += omzet;
             acc.total_hpp += hpp;
             acc.total_profit += omzet - hpp;
-            acc.jumlah_transaksi += 1;
+            acc.transaction_quantity += 1;
             return acc;
           },
-          { total_omzet: 0, total_hpp: 0, total_profit: 0, jumlah_transaksi: 0 }
+          { total_omzet: 0, total_hpp: 0, total_profit: 0, transaction_quantity: 0 }
         );
 
         return { data: { summary, rows } };

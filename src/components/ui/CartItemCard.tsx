@@ -1,5 +1,5 @@
 import styles from './CartItemCard.module.css';
-import { formatRupiah } from '../../utils/format';
+import { formatCurrency } from '../../utils/format';
 import { CartItem } from '../../types';
 
 interface StatProps {
@@ -17,7 +17,7 @@ export function CartItemCard({ cartItem: product, onRemove }: StatProps) {
 			</div>
 			<div className={styles.statLabel}>Qty: {product.quantity}</div>
 			<div className={`${styles.statLabel} mono`}>
-				{formatRupiah(product.final_price * product.quantity)}
+				{formatCurrency(product.final_price * product.quantity)}
 			</div>
 			<button
 				type='button'

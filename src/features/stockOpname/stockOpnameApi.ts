@@ -4,7 +4,6 @@ import type { StockOpnameSession, ScannedItem, ReconciliationRow } from '../../t
 
 export const stockOpnameApi = api.injectEndpoints({
   endpoints: (build) => ({
-    // Sesi 'ongoing' yang aktif (jika ada)
     getOngoingSession: build.query<StockOpnameSession | null, void>({
       async queryFn() {
         const { data, error } = await supabase
@@ -50,7 +49,6 @@ export const stockOpnameApi = api.injectEndpoints({
       invalidatesTags: ['OpnameSession'],
     }),
 
-    // Scan satu barcode → upsert via RPC (increment scanned_quantity)
     scanItem: build.mutation<ScannedItem, { session_id: string; barcode: string }>({
       async queryFn({ session_id, barcode }) {
         const { data, error } = await supabase.rpc('scan_opname_item', {
@@ -63,7 +61,6 @@ export const stockOpnameApi = api.injectEndpoints({
       invalidatesTags: ['ScannedItem'],
     }),
 
-    // Hasil scan saat ini untuk satu sesi (untuk running count di UI)
     getScannedItems: build.query<ScannedItem[], string>({
       async queryFn(session_id) {
         const { data, error } = await supabase
@@ -76,16 +73,13 @@ export const stockOpnameApi = api.injectEndpoints({
       providesTags: ['ScannedItem'],
     }),
 
-    // Laporan rekonsiliasi: gabungkan semua produk dengan hasil scan sesi
     getReconciliation: build.query<ReconciliationRow[], string>({
       async queryFn(session_id) {
-        // Ambil semua produk + merk
         const { data: products, error: pErr } = await supabase
           .from('products')
           .select('product_id, serial_number, available_stock, brands(brand_name)');
         if (pErr) return { error: { message: pErr.message } };
 
-        // Ambil hasil scan untuk sesi ini
         const { data: scanned, error: sErr } = await supabase
           .from('stock_opname_scanned_items')
           .select('product_id, scanned_quantity')
@@ -118,12 +112,11 @@ export const stockOpnameApi = api.injectEndpoints({
             serial_number: p.serial_number,
             expected_qty: p.available_stock,
             scanned_qty,
-            selisih: scanned_qty - p.available_stock,
+            difference: scanned_qty - p.available_stock,
           };
         });
 
-        // Urutkan: selisih terbesar (paling bermasalah) di atas
-        rows.sort((a, b) => a.selisih - b.selisih);
+        rows.sort((a, b) => a.difference - b.difference);
         return { data: rows };
       },
       providesTags: ['ScannedItem'],

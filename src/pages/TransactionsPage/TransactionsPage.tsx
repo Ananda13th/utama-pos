@@ -1,6 +1,6 @@
 import { useGetTransactionsQuery } from '../../features/transactions/transactionsApi';
 import {
-	formatRupiah,
+	formatCurrency,
 	formatDateTime,
 	calculateProfit,
 } from '../../utils/format';
@@ -38,7 +38,7 @@ export function TransactionsPage() {
 										{transaction.brand_name} · {transaction.serial_number}
 									</span>
 									<span className={`${styles.price} mono`}>
-										{formatRupiah(
+										{formatCurrency(
 											transaction.final_price * transaction.quantity,
 										)}
 									</span>
@@ -47,7 +47,7 @@ export function TransactionsPage() {
 									<span>{formatDateTime(transaction.transaction_time)}</span>
 									<span>Qty: {transaction.quantity}</span>
 									<span className={profit < 0 ? styles.neg : styles.pos}>
-										Profit {formatRupiah(profit)}
+										Profit {formatCurrency(profit)}
 									</span>
 								</div>
 							</li>

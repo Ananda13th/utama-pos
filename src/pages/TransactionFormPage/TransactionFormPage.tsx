@@ -15,7 +15,7 @@ import { useToast } from '../../hooks/useToast';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { BarcodeScanner } from '../../components/BarcodeScanner/BarcodeScanner';
-import { formatRupiah, calculateProfit } from '../../utils/format';
+import { formatCurrency, calculateProfit } from '../../utils/format';
 import type { Product } from '../../types';
 import page from '../../styles/page.module.css';
 import styles from './TransactionFormPage.module.css';
@@ -77,8 +77,6 @@ export function TransactionFormPage() {
 		}
 	}
 
-	// Stok yang sudah "dipesan" item lain di cart untuk produk yang sama —
-	// perlu dikurangi dari stok tampilan agar tidak overselling sebelum checkout
 	const reservedInCart = selected
 		? cart
 				.filter((i) => i.product_id === selected.product_id)
@@ -132,7 +130,6 @@ export function TransactionFormPage() {
 		setCheckingOut(false);
 
 		if ('error' in result) {
-			// All-or-nothing: order gagal total, cart tetap utuh agar kasir bisa retry
 			toast(
 				`Pesanan gagal disimpan: ${(result.error as { message: string }).message}`,
 				'error',
@@ -195,7 +192,7 @@ export function TransactionFormPage() {
 											</span>
 										</div>
 										<span className={`${styles.resPrice} mono`}>
-											{formatRupiah(p.base_price)}
+											{formatCurrency(p.base_price)}
 										</span>
 									</button>
 								</li>
@@ -225,7 +222,7 @@ export function TransactionFormPage() {
 
 					<div className={styles.infoRow}>
 						<span>Harga pokok</span>
-						<span className='mono'>{formatRupiah(selected.base_price)}</span>
+						<span className='mono'>{formatCurrency(selected.base_price)}</span>
 					</div>
 					<div className={styles.infoRow}>
 						<span>
@@ -264,7 +261,7 @@ export function TransactionFormPage() {
 						<div className={styles.sumRow}>
 							<span>Subtotal</span>
 							<span className='mono'>
-								{formatRupiah(finalPrice * quantity)}
+								{formatCurrency(finalPrice * quantity)}
 							</span>
 						</div>
 						<div className={styles.sumRow}>
@@ -272,7 +269,7 @@ export function TransactionFormPage() {
 							<span
 								className={`mono ${profit < 0 ? styles.negative : styles.positive}`}
 							>
-								{formatRupiah(profit)}
+								{formatCurrency(profit)}
 							</span>
 						</div>
 					</div>
@@ -298,7 +295,7 @@ export function TransactionFormPage() {
 
 					<div className={styles.cartTotalRow}>
 						<span className='mono'>Total Pesanan : </span>
-						<span className='mono'>{formatRupiah(cartTotal)}</span>
+						<span className='mono'>{formatCurrency(cartTotal)}</span>
 					</div>
 
 					<div className={page.actions}>

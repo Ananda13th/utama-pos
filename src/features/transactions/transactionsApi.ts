@@ -40,7 +40,6 @@ const SELECT =
 
 export const transactionsApi = api.injectEndpoints({
   endpoints: (build) => ({
-    // Catat transaksi via RPC atomic (insert + kurangi stok)
     recordTransaction: build.mutation<
       string,
       { product_id: string; final_price: number; quantity: number }
@@ -71,7 +70,6 @@ export const transactionsApi = api.injectEndpoints({
       invalidatesTags: ['Transaction', 'Product'],
     }),
 
-    // Riwayat transaksi dengan filter rentang tanggal (ISO string)
     getTransactions: build.query<
       Transaction[],
       { from?: string; to?: string } | void

@@ -2,7 +2,6 @@ import { api } from '../../lib/api';
 import { supabase } from '../../lib/supabaseClient';
 import type { AppUser } from '../../types';
 
-// Ambil profil user (termasuk role) dari tabel users + roles
 async function fetchProfile(userId: string, email: string): Promise<AppUser> {
   const { data, error } = await supabase
     .from('users')
@@ -12,7 +11,6 @@ async function fetchProfile(userId: string, email: string): Promise<AppUser> {
 
   if (error) throw error;
 
-  // roles bisa berupa objek atau array tergantung relasi — tangani keduanya
   const roleRel = data.roles as unknown as { role_name: 'owner' | 'cashier' } | { role_name: 'owner' | 'cashier' }[];
   const role_name = Array.isArray(roleRel) ? roleRel[0]?.role_name : roleRel?.role_name;
 
@@ -48,7 +46,6 @@ export const authApi = api.injectEndpoints({
       },
     }),
 
-    // Dipakai saat refresh halaman untuk memulihkan session
     getCurrentUser: build.query<AppUser | null, void>({
       async queryFn() {
         try {
