@@ -254,8 +254,7 @@ export function TransactionFormPage() {
 						inputMode='numeric'
 						value={quantity || ''}
 						onChange={(e) => {
-							const digitsOnly = e.target.value.replace(/[^0-9]/g, '');
-							setQuantity(Number(digitsOnly));
+							setQuantity(parseInt(e.target.value));
 						}}
 						error={stockShort ? 'Melebihi stok tersedia' : undefined}
 					/>
