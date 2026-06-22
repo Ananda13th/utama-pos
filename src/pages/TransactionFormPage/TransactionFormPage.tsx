@@ -238,6 +238,7 @@ export function TransactionFormPage() {
 						type='number'
 						inputMode='numeric'
 						value={finalPrice || ''}
+						onChange={(e) => setFinalPrice(Number(e.target.value))}
 					/>
 					{belowCost && (
 						<p className={styles.warning}>
