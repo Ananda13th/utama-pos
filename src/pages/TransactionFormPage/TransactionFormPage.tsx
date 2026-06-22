@@ -238,7 +238,6 @@ export function TransactionFormPage() {
 						type='number'
 						inputMode='numeric'
 						value={finalPrice || ''}
-						onChange={(e) => setFinalPrice(Number(e.target.value))}
 					/>
 					{belowCost && (
 						<p className={styles.warning}>
@@ -250,10 +249,13 @@ export function TransactionFormPage() {
 					<Input
 						label='Jumlah'
 						name='quantity'
-						type='number'
+						type='text'
 						inputMode='numeric'
 						value={quantity || ''}
-						onChange={(e) => setQuantity(Number(e.target.value))}
+						onChange={(e) => {
+							const digitsOnly = e.target.value.replace(/[^0-9]/g, '');
+							setQuantity(Number(digitsOnly));
+						}}
 						error={stockShort ? 'Melebihi stok tersedia' : undefined}
 					/>
 
